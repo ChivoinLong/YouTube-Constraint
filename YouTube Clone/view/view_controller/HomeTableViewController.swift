@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SnapKit
 
 class HomeTableViewController: UITableViewController {
 
@@ -17,7 +16,7 @@ class HomeTableViewController: UITableViewController {
         super.viewDidLoad()
         
         youtubeVideos = VideoData.get()
-        addNavBarImage()        
+        addNavBarImage(isLandscape: false)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -46,25 +45,28 @@ class HomeTableViewController: UITableViewController {
         }
     }
     
-    func addNavBarImage() {
+    func addNavBarImage(isLandscape: Bool) {
 
         let navHeight = navigationController!.navigationBar.frame.height
         let navWidth = navigationController!.navigationBar.frame.width
         
         let youtubeIcon =  #imageLiteral(resourceName: "youtube-logo")
         let imageView = UIImageView(image: youtubeIcon)
-//        navigationItem.titleView = imageView
+        imageView.contentMode = .scaleAspectFit
+        imageView.frame = CGRect(x: 0, y: 0, width: 100, height: navHeight)
         
-        imageView.frame = CGRect(x: -15, y: 0, width: navWidth, height: navHeight)
-        imageView.contentMode = .scaleAspectFill
-        let imageItem = UIBarButtonItem.init(customView: imageView)
+        let customView = UIView(frame: CGRect(x: 0, y: 0, width: navWidth, height: navHeight))
+        customView.addSubview(imageView)
         
-        let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: navWidth / 4)
-        let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: navHeight)
+        let barBtn = UIBarButtonItem(customView: customView)
         
-        heightConstraint.isActive = true
-        widthConstraint.isActive = true
-        navigationItem.leftBarButtonItem = imageItem
+        self.navigationItem.leftBarButtonItem = barBtn
+    }
+    
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        tableView.reloadData()
     }
 }
 

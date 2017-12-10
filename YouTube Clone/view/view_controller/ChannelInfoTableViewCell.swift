@@ -24,4 +24,5 @@ class ChannelInfoTableViewCell: UITableViewCell {
         subcriberNumberLabel.text = data.channel.subscriberNumber
     }
     
+    
 }
